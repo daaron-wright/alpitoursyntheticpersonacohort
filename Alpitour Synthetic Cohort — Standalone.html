@@ -1,0 +1,856 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Alpitour · Synthetic Persona Cohort</title>
+<link rel="stylesheet" href="assets/ds/colors_and_type.css"/>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --tw: "TWK Everett", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --mono: "Geist Mono", ui-monospace, "Cascadia Code", monospace;
+  --stone: #0D0F11;
+  --ease: cubic-bezier(.4,0,.2,1);
+}
+html, body { font-family: var(--tw); color: #1F2A30; background: #F4F7F8; -webkit-font-smoothing: antialiased; }
+button, input, textarea, select { font-family: var(--tw); }
+
+/* ── PAGE ── */
+.page { max-width: 1280px; margin: 0 auto; padding: 48px 32px 80px; }
+@media (max-width:640px) { .page { padding: 24px 16px 60px; } }
+.page-hd { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; flex-wrap: wrap; margin-bottom: 4px; }
+.page-eyb { font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #1F5A63; }
+.page-h1 { font-size: 40px; font-weight: 500; letter-spacing: -.025em; margin: 8px 0 10px; color: #0F172A; line-height: 1.08; }
+@media (max-width:640px) { .page-h1 { font-size: 28px; } }
+.page-sub { font-size: 14.5px; color: #475569; max-width: 680px; line-height: 1.65; font-weight: 400; }
+.page-logos { display: flex; align-items: center; gap: 14px; flex-shrink: 0; padding-top: 4px; }
+.page-logos img { height: 28px; display: block; }
+.page-logos .sep { width: 1px; height: 24px; background: #E2E8F0; }
+.page-note { font-size: 11.5px; color: #64748B; margin: 18px 0 26px; display: inline-flex; align-items: center; gap: 8px; }
+.page-dot { width: 7px; height: 7px; border-radius: 50%; background: #FF462D; flex-shrink: 0; }
+.ch-seg { display: inline-flex; background: #fff; border: 1px solid #E2E8F0; border-radius: 999px; padding: 3px; margin-top: 16px; }
+.ch-seg button { border: none; background: transparent; font-family: var(--tw); font-size: 12px; font-weight: 600; color: #64748B; padding: 5px 14px; border-radius: 999px; cursor: pointer; transition: background .15s, color .15s; }
+.ch-seg button.on { background: #29707A; color: #fff; }
+
+/* ── GRID ── */
+.grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+@media (max-width:900px) { .grid { grid-template-columns: repeat(2,1fr); } }
+@media (max-width:580px) { .grid { grid-template-columns: 1fr; } }
+
+/* ── CARD ── */
+.card { background: #fff; border: 1px solid #E5E7EB; border-radius: 14px; padding: 18px; display: flex; flex-direction: column; gap: 12px; cursor: pointer; transition: box-shadow .16s var(--ease), border-color .16s var(--ease), transform .16s var(--ease); }
+.card:hover { border-color: var(--tone); box-shadow: 0 6px 22px rgba(15,23,42,.09); transform: translateY(-2px); }
+.card-id { display: flex; align-items: center; gap: 12px; }
+.card-ava { width: 48px; height: 48px; border-radius: 8px; flex-shrink: 0; object-fit: cover; display: block; }
+.card-init { width: 48px; height: 48px; border-radius: 8px; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; font-weight: 600; font-size: 17px; color: #fff; }
+.card-name { font-size: 15px; font-weight: 600; line-height: 1.2; color: #0F172A; display: block; }
+.card-role { font-size: 12px; color: #64748B; margin-top: 2px; display: block; font-weight: 400; }
+.card-quote { font-size: 14px; font-style: italic; line-height: 1.52; color: #374151; flex: 1; }
+.card-foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; border-top: 1px solid #F1F5F9; padding-top: 12px; min-height: 0; }
+.card-tags { font-size: 11px; color: #64748B; font-weight: 400; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.card-open { font-size: 11px; font-weight: 500; color: #374151; background: transparent; border: 1px solid #D1D5DB; border-radius: 6px; padding: 4px 10px; cursor: pointer; white-space: nowrap; flex-shrink: 0; transition: border-color .15s, color .15s; }
+.card:hover .card-open { border-color: var(--tone); color: var(--tone); }
+
+/* ── MODAL SCRIM ── */
+.mscrim { position: fixed; inset: 0; z-index: 500; background: rgba(8,10,12,.6); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); display: none; align-items: center; justify-content: center; padding: 20px; animation: sc-fade .18s; }
+.mscrim.open { display: flex; }
+.mbox { width: min(1300px,100%); height: min(900px,100%); background: #fff; border-radius: 16px; box-shadow: 0 48px 120px rgba(0,0,0,.5); display: flex; flex-direction: column; overflow: hidden; }
+
+/* ── MODAL BAR ── */
+.mbar { background: var(--stone); display: flex; align-items: center; gap: 10px; padding: 0 18px; height: 52px; flex-shrink: 0; }
+.mbar-back { border: 1px solid rgba(255,255,255,.18); background: transparent; color: rgba(255,255,255,.75); font-family: var(--tw); font-size: 12.5px; font-weight: 500; padding: 6px 12px; border-radius: 8px; cursor: pointer; flex-shrink: 0; }
+.mbar-name { font-size: 17px; font-weight: 600; color: #fff; white-space: nowrap; }
+.mbar-role { font-size: 12px; color: rgba(255,255,255,.5); white-space: nowrap; }
+.mbar-code { font-size: 11px; color: rgba(255,255,255,.3); white-space: nowrap; }
+.mbar-sp { flex: 1; }
+.mseg { display: flex; background: rgba(255,255,255,.1); border-radius: 999px; padding: 3px; flex-shrink: 0; }
+.mseg button { border: none; background: transparent; color: rgba(255,255,255,.55); font-family: var(--tw); font-size: 12.5px; font-weight: 600; padding: 5px 15px; border-radius: 999px; cursor: pointer; transition: background .15s, color .15s; }
+.mseg button.on { background: #fff; color: var(--stone); }
+.mnav { display: flex; gap: 8px; flex-shrink: 0; }
+.mnav button { border: 1px solid rgba(255,255,255,.18); background: transparent; color: rgba(255,255,255,.75); font-family: var(--tw); font-size: 12.5px; font-weight: 500; padding: 6px 13px; border-radius: 8px; cursor: pointer; }
+.mclose { border: none; background: #FF462D; color: #fff; font-family: var(--tw); font-size: 12.5px; font-weight: 600; padding: 6px 14px; border-radius: 8px; cursor: pointer; flex-shrink: 0; }
+
+/* ── MODAL BODY ── */
+.mbody { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.mbody.profile { overflow-y: auto; background: #F4F7F8; }
+.mbody.talk { display: grid; grid-template-columns: 1fr 1fr; overflow: hidden; }
+@media (max-width:800px) { .mbody.talk { grid-template-columns: 1fr; } }
+
+/* ── PROFILE VIEW ── */
+.prof { padding: 30px 32px 32px; }
+.prof-eyb { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.prof-badge { background: #FFEEE9; color: #B82915; font-size: 9.5px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; border-radius: 4px; padding: 3px 9px; }
+.prof-eyb-txt { font-size: 11px; color: #64748B; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
+.prof-h2 { font-size: 30px; font-weight: 700; color: #0F172A; letter-spacing: -.02em; margin-bottom: 20px; line-height: 1.1; }
+
+/* bio card */
+.bio { background: #fff; border: 1px solid #E5E7EB; border-radius: 14px; padding: 22px 24px; display: grid; grid-template-columns: 150px 1fr 200px; gap: 24px; margin-bottom: 18px; }
+@media (max-width:800px) { .bio { grid-template-columns: 1fr; } }
+.bio-ava-col { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+.bio-img { width: 88px; height: 88px; border-radius: 10px; object-fit: cover; display: block; }
+.bio-init { width: 88px; height: 88px; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; font-size: 30px; font-weight: 600; color: #fff; }
+.bio-name { font-size: 15px; font-weight: 700; color: #0F172A; line-height: 1.25; }
+.bio-pron { font-size: 11.5px; color: #64748B; }
+.bio-pills { display: flex; flex-wrap: wrap; gap: 5px; }
+.bio-pill { font-size: 10.5px; color: #374151; border: 1px solid #E2E8F0; border-radius: 999px; padding: 2px 9px; }
+.bio-code { font-family: var(--mono); font-size: 9.5px; color: #94A3B8; }
+.bio-q { font-size: 22px; font-weight: 400; color: #0F172A; line-height: 1.38; letter-spacing: -.01em; margin-bottom: 12px; }
+.bio-qm { font-size: 40px; font-weight: 700; line-height: .8; vertical-align: top; margin-right: 1px; }
+.bio-text { font-size: 13.5px; color: #475569; line-height: 1.65; }
+.ctx-hd { font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #9CA3AF; margin-bottom: 12px; }
+.ctx-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 7px; }
+.ctx-k { font-size: 12px; color: #9CA3AF; flex-shrink: 0; }
+.ctx-v { font-size: 12px; color: #1F2A30; font-weight: 500; text-align: right; }
+
+/* 3-col section */
+.pcols { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
+@media (max-width:800px) { .pcols { grid-template-columns: 1fr; } }
+.pcol { background: #F8FAFC; border: 1px solid #E9EDF2; border-radius: 12px; padding: 18px 20px; }
+.pcol-eyb { font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #9CA3AF; margin-bottom: 6px; }
+.pcol-h { font-size: 17px; font-weight: 700; color: #0F172A; margin-bottom: 16px; letter-spacing: -.01em; }
+.goal { display: flex; gap: 12px; margin-bottom: 12px; }
+.goal-n { font-size: 15px; font-weight: 700; flex-shrink: 0; line-height: 1.1; }
+.goal-t { font-size: 13px; font-weight: 600; color: #1F2A30; margin-bottom: 3px; }
+.goal-d { font-size: 12px; color: #64748B; line-height: 1.5; }
+.frust { padding-left: 11px; margin-bottom: 13px; }
+.frust.red  { border-left: 3px solid #D7373F; }
+.frust.amber{ border-left: 3px solid #E6A100; }
+.frust.teal { border-left: 3px solid #29707A; }
+.frust-t { font-size: 13px; font-weight: 600; color: #1F2A30; margin-bottom: 3px; }
+.frust-d { font-size: 12px; color: #64748B; line-height: 1.5; }
+.trust-row { margin-bottom: 18px; }
+.trust-lbls { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 11px; color: #9CA3AF; }
+.trust-track { position: relative; height: 4px; border-radius: 999px; background: #F1F5F9; }
+.trust-dot { position: absolute; top: 50%; transform: translate(-50%,-50%); width: 14px; height: 14px; border-radius: 50%; background: #fff; border-width: 2px; border-style: solid; }
+.trust-note { font-size: 11px; color: #9CA3AF; margin-top: 6px; font-style: italic; line-height: 1.4; }
+
+/* ── TALK PANELS ── */
+.tleft { background: #fff; display: flex; flex-direction: column; overflow: hidden; border-right: 1px solid #F1F5F9; }
+.tleft-bar { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; font-size: 9.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #64748B; border-bottom: 1px solid #F1F5F9; flex-shrink: 0; }
+.orb-area { flex: 1; position: relative; overflow: hidden; min-height: 0; cursor: crosshair; touch-action: none; transition: background .4s ease; }
+.orb-area canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.tleft-status { padding: 14px 16px 12px; border-top: 1px solid #F1F5F9; flex-shrink: 0; }
+.tstatus-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.tstatus-ico { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.tstatus-lbl { font-size: 14px; font-weight: 600; color: #1F2A30; }
+.tstatus-sub { font-size: 10.5px; color: #64748B; }
+.mood-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 7px; }
+.mood-tile { border: 1px solid #E2E8F0; border-radius: 9px; padding: 8px 9px; }
+.mood-tile.active { border-color: var(--tone); background: var(--tone-soft,rgba(0,0,0,.04)); }
+.mood-tile b { display: block; font-size: 11px; font-weight: 600; color: #1F2A30; margin-bottom: 1px; }
+.mood-tile span { font-size: 9.5px; color: #64748B; }
+.tleft-foot { padding: 11px 16px 14px; border-top: 1px solid #F1F5F9; flex-shrink: 0; }
+.tleft-quote { font-size: 12px; font-style: italic; color: #64748B; line-height: 1.4; margin-bottom: 4px; }
+.tleft-note { font-size: 10px; color: #94A3B8; }
+
+/* talk right — dark chat */
+.tright { background: #1A1F24; display: flex; flex-direction: column; overflow: hidden; }
+.chat-msgs { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px; scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.08) transparent; }
+.cmsg { display: flex; gap: 8px; max-width: 92%; }
+.cmsg.user { align-self: flex-end; flex-direction: row-reverse; }
+.cmsg.ai { align-self: flex-start; }
+.cmsg-label { font-size: 9px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 4px; }
+.cmsg.user .cmsg-label { text-align: right; color: #4B5563; }
+.cmsg-body { font-size: 13px; line-height: 1.56; }
+.cmsg.ai .cmsg-body { color: #D1D5DB; }
+.cmsg.user .cmsg-body { color: #fff; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.09); padding: 9px 12px; border-radius: 12px 12px 4px 12px; }
+.cchips { padding: 2px 16px 10px; display: flex; flex-wrap: wrap; gap: 7px; }
+.cchips-lbl { flex-basis: 100%; font-size: 9px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #374151; margin-bottom: 2px; }
+.cchip { font-size: 11.5px; color: #9CA3AF; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.09); border-radius: 999px; padding: 5px 13px; cursor: pointer; font-family: var(--tw); transition: border-color .15s, color .15s; }
+.cchip:hover { border-color: var(--tone,#FF462D); color: #fff; }
+.cinput-bar { padding: 12px 16px 10px; border-top: 1px solid rgba(255,255,255,.06); display: flex; gap: 8px; align-items: flex-end; flex-shrink: 0; }
+.cta { flex: 1; resize: none; border: 1px solid rgba(255,255,255,.11); background: rgba(255,255,255,.05); border-radius: 10px; padding: 10px 14px; font-family: var(--tw); font-size: 13px; line-height: 1.4; max-height: 96px; color: #fff; outline: none; transition: border-color .15s; }
+.cta:focus { border-color: rgba(255,255,255,.2); }
+.cta::placeholder { color: #374151; }
+.cask { flex-shrink: 0; height: 40px; padding: 0 20px; border-radius: 9px; border: none; background: var(--tone,#FF462D); color: #fff; cursor: pointer; font-family: var(--tw); font-size: 13px; font-weight: 600; transition: opacity .15s; }
+.cask:disabled { opacity: .4; }
+.cfoot { display: flex; align-items: center; justify-content: space-between; padding: 0 16px 12px; flex-shrink: 0; }
+.cfoot-note { font-size: 10px; color: #374151; }
+.cclear { font-size: 10.5px; color: #4B5563; background: transparent; border: 1px solid rgba(255,255,255,.09); border-radius: 6px; padding: 3px 9px; cursor: pointer; font-family: var(--tw); transition: color .15s; }
+.cclear:hover { color: #9CA3AF; }
+.cdots { display: inline-flex; gap: 4px; padding: 4px 2px; align-self: flex-start; }
+.cdot { width: 5px; height: 5px; border-radius: 50%; display: block; }
+
+/* ── API OVERLAY ── */
+.ovscrim { position: fixed; inset: 0; z-index: 9999; display: none; align-items: center; justify-content: center; background: rgba(8,10,12,.82); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+.ovscrim.open { display: flex; }
+.ovbox { background: #1A2027; border: 1px solid rgba(255,255,255,.12); border-radius: 18px; padding: 34px 30px 28px; width: min(440px,calc(100vw - 40px)); box-shadow: 0 48px 120px rgba(0,0,0,.7); color: #E8EDEF; font-family: var(--tw); }
+.ov-eyb { font-size: 10.5px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #FF462D; margin-bottom: 10px; }
+.ov-title { font-size: 24px; font-weight: 600; margin-bottom: 8px; letter-spacing: -.01em; }
+.ov-sub { font-size: 13px; color: #8C99A0; line-height: 1.6; margin-bottom: 22px; }
+.ov-inp { display: block; width: 100%; background: rgba(255,255,255,.06); border: 1.5px solid rgba(255,255,255,.14); border-radius: 11px; padding: 12px 15px; font-family: var(--tw); font-size: 14px; color: #fff; margin-bottom: 13px; outline: none; transition: border-color .15s; }
+.ov-inp:focus { border-color: rgba(255,70,45,.65); }
+.ov-btn { display: block; width: 100%; padding: 12px; border: none; border-radius: 11px; background: #FF462D; color: #fff; font-family: var(--tw); font-size: 14px; font-weight: 600; cursor: pointer; }
+.ov-err { font-size: 12px; color: #FF8066; margin-top: 10px; min-height: 18px; }
+.ov-link { display: block; margin-top: 16px; font-size: 11.5px; color: #5B9FAB; text-decoration: none; text-align: center; opacity: .8; }
+
+@keyframes sc-fade { from{opacity:0}to{opacity:1} }
+@keyframes scp-b { 0%,100%{transform:translateY(0);opacity:.3}50%{transform:translateY(-3px);opacity:1} }
+</style>
+</head>
+<body>
+
+<!-- PAGE -->
+<div class="page">
+  <div class="page-hd">
+    <div>
+      <div class="page-eyb">People · synthetic cohort</div>
+      <h1 class="page-h1">The voices in the room</h1>
+      <p class="page-sub">A synthetic cohort for validating AlpiConcierge 2.0 — the stakeholders who govern and build it, and the travel advisors who live in it every day. Each is an AI stand-in, grounded in the demo brief. Open any one to interrogate their view, or read their profile.</p>
+      <div class="ch-seg" id="seg">
+        <button data-m="talk" class="on">Open to Talk</button>
+        <button data-m="profile">Open to Profile</button>
+      </div>
+    </div>
+    <div class="page-logos">
+      <img src="assets/alpitour-world.png" alt="Alpitour World" onerror="this.style.display='none'"/>
+      <span class="sep"></span>
+      <img src="alpitour/storefront/personas/kyndryl-vital-logo.png" alt="Kyndryl Vital" onerror="this.style.display='none'"/>
+    </div>
+  </div>
+  <div class="page-note"><span class="page-dot"></span> Synthetic personas — composite stand-ins for validation, not records of real people.</div>
+  <div class="grid" id="grid"></div>
+</div>
+
+<!-- MODAL -->
+<div class="mscrim" id="modal">
+  <div class="mbox">
+    <div class="mbar">
+      <button class="mbar-back" id="btn-back">‹ Cohort</button>
+      <span class="mbar-name" id="mbar-name"></span>
+      <span class="mbar-role" id="mbar-role"></span>
+      <span class="mbar-code" id="mbar-code"></span>
+      <span class="mbar-sp"></span>
+      <div class="mseg" id="mseg">
+        <button data-v="profile">Profile</button>
+        <button data-v="talk" class="on">Talk</button>
+      </div>
+      <div class="mnav">
+        <button id="btn-prev">← Prev</button>
+        <button id="btn-next">Next →</button>
+      </div>
+      <button class="mclose" id="btn-close">Close ×</button>
+    </div>
+    <div class="mbody" id="mbody"></div>
+  </div>
+</div>
+
+<!-- API OVERLAY -->
+<div class="ovscrim" id="ov">
+  <div class="ovbox">
+    <div class="ov-eyb">AlpiGPT · Live Mode</div>
+    <div class="ov-title">Connect to Claude</div>
+    <p class="ov-sub">Enter your Anthropic API key to enable live persona chat. The key is stored only in this browser and sent only to api.anthropic.com.</p>
+    <input class="ov-inp" id="ov-key" type="password" placeholder="sk-ant-…" autocomplete="off" spellcheck="false"/>
+    <button class="ov-btn" id="ov-btn">Connect →</button>
+    <div class="ov-err" id="ov-err"></div>
+    <a class="ov-link" href="https://console.anthropic.com/settings/keys" target="_blank">Get a key from the Anthropic Console ↗</a>
+  </div>
+</div>
+
+<script>
+/* ================================================================
+   DATA
+   ================================================================ */
+const DEMO = 'You are taking part in a live validation of the AlpiConcierge 2.0 demo for Alpitour World. AlpiConcierge 2.0 turns AlpiConcierge from a Q&A bot into an agentic system that runs a travel agent\'s whole sales workflow on one screen. Tredi is the intelligent supervisor; it coordinates specialist experts over live inventory, pricing and policy. Worked example: the Carter family (2 adults + a 2-year-old) want 10 days around Italy in August ~CA$11,000. AlpiConcierge recovers a sold-out hotel, writes a proposal, places a gated hold, services a date change, and recovers a mid-trip disruption. It runs on the Kyndryl Agentic Framework (KAF): destructive tools always gate on the human agent, every action has provenance, policy is enforced as code.';
+
+const ROLE_SYS = {
+  francesco: 'Be pragmatic, time-poor, strategic and a little skeptical. Care about integration risk, reliability, security, governance/policy-as-code on KAF, total cost, vendor lock-in, change management across the agency network, and measurable ROI. End with one sharp question when it helps. Lightly Italian-inflected professional English.',
+  fabio: "Be hands-on and curious. Care about orchestration quality, tool-call gating, grounding/provenance vs hallucination, evals, latency, model routing and human-in-the-loop. Technical but plain; end with one probing follow-up when it helps.",
+  owner: "You are an independent travel-agency owner-operator. Judge everything by bookings won, staff hours saved, margin protected, and whether the customer relationship stays with your agency. Blunt, commercial, wary of disintermediation.",
+  branch: "You are a high-street branch counter agent. Care about raw speed with a customer in front of you, no tool-switching, and never quoting something sold out. Friendly, fast, practical.",
+  specialist: "You are a luxury, tailor-made travel specialist. Sell judgement and personalization, not packages. Control over every segment, genuinely premium inventory, never making a discerning client feel mass-produced. Refined, exacting.",
+  giuseppe: "You are an enterprise architect. Judge by how it fits the existing estate — clean contracts, clear ownership, event flow, observability, graceful failure. Wary of new silos and hidden coupling. Structured, precise.",
+};
+
+const PEOPLE = [
+  { id:'francesco', code:'P-ALP-01', idx:1, name:'Francesco Ciuccarelli', role:'CIO · Alpitour World', archetype:'The Platform Steward', img:'alpitour/storefront/personas/francesco-ciuccarelli.png', tone:'#FF462D', toneSoft:'rgba(255,70,45,.10)', moodLine:'MEASURED · COST-AWARE', tags:['Governance','Cost'], pron:'he/him · Milano', quote:'Speed without a governed operating pattern is just faster risk.', greet:"Francesco here. I don't need the pitch — show me where this de-risks the platform and what it costs to run. I'll poke holes.", bio:"Francesco owns the platform AlpiConcierge runs on. He judges every initiative by integration risk, reliability, auditability and total cost — and by whether it actually deflects calls and tickets across the Welcome Travel agency network. He wants one governed operating pattern, not ten point integrations.", context:[['Reports to','Group COO'],['Scope','Platform · integration · governance'],['Systems','EasyBook · LyteAI · Easybooking · Neos · KAF'],['Owns (R)','Reliability · security · cost'],['Loudest in','Governance · Cost']], goals:[['One governed operating pattern','Not ten brittle integrations — a reusable substrate the whole network runs on.'],['Auditable, reversible actions','Every agent write gated, logged, and explainable six months later.'],['Measurable deflection','Fewer calls and tickets, shorter quote-cycle time — numbers, not vibes.']], frustrations:[['red','Point integrations as liabilities','Each new connector is another thing that breaks at month-end.'],['amber','"AI magic" with no provenance',"If it can't show its source or be rolled back, it doesn't ship."],['teal',"Change the network can't absorb","2,000 agencies can't be retrained on a new tool every quarter."]], trust:[['AI may act','AI suggests only',38,'automation fine for routine; commercial commits stay human'],['Trusts defaults','Demands evidence',28,'wants the source, the cost line and the rollback path']], moods:[['Engaged','warm · steady'],['Cautious','spruce-led · measured',true],['Skeptical','cool · probing'],['Impatient','warm flares · time-poor']] },
+  { id:'fabio', code:'P-ALP-02', idx:2, name:'Fabio Olgiati', role:'AI Lead · Alpitour World', archetype:'The Orchestration Lead', img:'alpitour/storefront/personas/fabio-olgiati.png', tone:'#29707A', toneSoft:'rgba(41,112,122,.10)', moodLine:'CURIOUS · PRECISE', tags:['AI','Controls'], pron:'he/him · Torino', quote:"A gate that doesn't change behaviour is just a pop-up.", greet:"Fabio. Walk me through the orchestration — supervisor, tools, gating. I'll check where the guardrails actually are.", bio:"Fabio owns the agent stack — how Tredi supervises Esperto Hotel, Tour and Destinazioni, how tools are gated, how answers stay grounded. He cares about evals, provenance, latency and human-in-the-loop far more than model demos.", context:[['Reports to','CIO'],['Scope','Agent orchestration · evals'],['Systems','Tredi · Esperto agents · KAF'],['Owns (R)','Guardrails · grounding · latency'],['Loudest in','AI · Controls']], goals:[['Grounded answers, always','Every claim traceable to live inventory, pricing or a policy doc.'],['Destructive tools always gate','Holds, rebooks and re-prices never fire without the human agent.'],['Evals that catch regressions','Know a release got worse before a customer does.']], frustrations:[['red','Hallucination dressed as confidence','A fluent wrong answer is worse than no answer.'],['amber','Gates that are theatre','If the agent rubber-stamps a pop-up, the gate bought nothing.'],['teal','Latency that breaks flow','If Tredi stalls, the agent reaches for the old tools.']], trust:[['AI may act','AI suggests only',55,'happy to automate retrieval & drafting; commits stay gated'],['Trusts defaults','Demands evidence',46,'defaults fine when the provenance is one click away']], moods:[['Engaged','warm · steady',true],['Probing','spruce-led · curious'],['Drifting','cool · low signal'],['Agitated','warm flares · blocked']] },
+  { id:'owner', code:'P-ALP-03', idx:3, name:'Agency owner', role:'Independent agency · owner-operator', archetype:'The Owner-Operator', init:'AO', img:null, tone:'#2C6FA0', toneSoft:'rgba(44,111,160,.10)', moodLine:'PRACTICAL · MARGIN-MINDED', tags:['Value','People'], pron:'Independent · high street', quote:"If it doesn't win me bookings or save me staff hours, it's overhead.", greet:"I run an independent agency. Show me how this makes my team faster and keeps the client mine — not Alpitour.it's. Then we'll talk.", bio:"Runs a small independent agency on commission and repeat clients. Every tool is judged on whether it wins bookings, trims staff hours, and keeps the customer relationship — and the margin — with the agency.", context:[['Reports to','Themselves'],['Scope','Whole agency P&L'],['Systems','Easybooking · brand portals'],['Owns (R)','Margin · staff · clients'],['Loudest in','Value · People']], goals:[['Win and keep bookings',"Faster, sharper quotes that close — and clients who come back to me."],['Less time per quote',"Two staff can't spend an afternoon assembling one family trip."],['Keep the relationship','The customer stays mine end-to-end, including changes and disruptions.']], frustrations:[['red','Disintermediation by Alpitour.it',"If the brand site does it all, what's my agency for?"],['amber',"Training overhead","A new tool every season my staff can't absorb."],['teal','Thin, slow margins','Time spent assembling is margin I never bill.']], trust:[['AI may act','AI suggests only',48,'automate the assembly; I close the sale'],['Trusts defaults','Demands evidence',40,"show me the price is real and the room is held"]], moods:[['Engaged','warm · steady'],['Cautious','spruce-led · measured',true],['Skeptical','cool · probing'],['Impatient','warm flares · time-poor']] },
+  { id:'branch', code:'P-ALP-04', idx:4, name:'Branch agent', role:'High-street branch · counter agent', archetype:'The Counter Agent', init:'BA', img:null, tone:'#3D8590', toneSoft:'rgba(61,133,144,.10)', moodLine:'FAST · WALK-IN READY', tags:['Speed','Service'], pron:'High-street branch', quote:"I've got a family at my desk in twenty minutes — can it keep up?", greet:"I work the counter. Walk-ins, phones, the lot. If this can keep up with a family sitting across from me, I'm interested. If it adds clicks, I'm not.", bio:"Works the counter at a high-street branch — walk-ins, phone enquiries, families deciding on the spot. Lives or dies on speed and confidence: a quote assembled while the customer is still in the chair.", context:[['Reports to','Branch manager'],['Scope','Counter · walk-ins'],['Systems','Easybooking · till'],['Owns (R)','The desk conversation'],['Loudest in','Speed · Service']], goals:[['Quote at the speed of a chat','Assemble and price while the customer is still talking.'],['One screen, no switching','Stop hopping between portals mid-conversation.'],["Confidence it's real","Never quote a room that's gone or a price that moves."]], frustrations:[['red',"Tool-switching at the counter","Every tab change loses the customer's attention."],['amber','Stale availability',"Promising something that's actually sold out."],['teal','Slow assembly',"The family leaves to 'think about it' and books online."]], trust:[['AI may act','AI suggests only',60,'let it assemble fast; I confirm before it commits'],['Trusts defaults','Demands evidence',52,'defaults are fine if the live check is right there']], moods:[['Engaged','warm · steady',true],['Rushed','spruce-led · quick'],['Drifting','cool · between customers'],['Agitated','warm flares · queue building']] },
+  { id:'specialist', code:'P-ALP-05', idx:5, name:'Travel specialist', role:'Luxury / tailor-made specialist', archetype:'The Tailor-Made Specialist', init:'TS', img:null, tone:'#B45309', toneSoft:'rgba(180,83,9,.10)', moodLine:'DISCERNING · BESPOKE', tags:['Craft','Trust'], pron:'Luxury · tailor-made', quote:'My clients pay for judgement, not a package off a shelf.', greet:"I build bespoke luxury trips. My clients pay for taste and control. If this flattens everything into a package, it's no use to me — show me where I keep the craft.", bio:"Designs high-touch, tailor-made luxury itineraries. Sells judgement and personalization, not catalogue packages. Cares that the tool gives control over every segment, surfaces genuinely premium options, and never makes a discerning client feel mass-produced.", context:[['Reports to','Head of luxury'],['Scope','Bespoke itineraries'],['Systems','Turisanda · Easybooking'],['Owns (R)','Design · client trust'],['Loudest in','Craft · Trust']], goals:[['Control every segment','Hand-pick each stay, transfer and experience — not accept a bundle.'],['Genuinely premium surfacing','Show the suite and the private transfer, not the entry room.'],['Protect the relationship',"The client trusts me; the tool should make me look sharper, not replaceable."]], frustrations:[['red','Everything flattened to a package','Bespoke clients notice generic instantly.'],['amber','Shallow premium inventory',"If it can't reach the good rooms, it can't help me."],['teal','Lost personalization',"Automation that strips the touches I'm paid for."]], trust:[['AI may act','AI suggests only',34,'draft and research, but I curate every choice'],['Trusts defaults','Demands evidence',30,'I want the why behind each recommendation']], moods:[['Engaged','warm · steady',true],['Discerning','spruce-led · exacting'],['Drifting','cool · unconvinced'],['Agitated','warm flares · generic']] },
+  { id:'giuseppe', code:'P-ALP-06', idx:6, name:'Giuseppe Parello', role:'Enterprise Architect · Alpitour World', archetype:'The Systems Architect', init:'GP', img:'alpitour/storefront/personas/giuseppe-parello.png', tone:'#6B36A8', toneSoft:'rgba(107,54,168,.10)', moodLine:'STRUCTURED · LONG-VIEW', tags:['Architecture','Integration'], pron:'he/him · Milano', quote:'Show me the contracts and the blast radius before you show me the demo.', greet:'Giuseppe, enterprise architecture. I care about how this fits the estate — contracts, events, ownership, failure modes. Walk me through the seams, not the screens.', bio:"Owns the reference architecture across Alpitour World — how AlpiConcierge, LyteAI, Easybooking, Neos and the agency channels actually interconnect. Judges the design by clean contracts, clear ownership, event flow, observability and graceful failure.", context:[['Reports to','CIO'],['Scope','Reference architecture · estate'],['Systems','KAF · EasyBook · LyteAI · Easybooking · Neos'],['Owns (R)','Contracts · integration · standards'],['Loudest in','Architecture · Integration']], goals:[['One coherent estate','AlpiConcierge as a layer on the existing systems — not a parallel stack.'],['Clean, versioned contracts','Every agent↔system call typed, owned and replayable.'],['Graceful failure & observability','Know what breaks, where, and how it degrades safely.']], frustrations:[['red',"Another silo bolted on","A clever tool that doesn't honour the estate's contracts."],['amber','Hidden coupling','Integrations that quietly depend on undocumented behaviour.'],['teal','No observability',"Can't trace a request across the agents and back."]], trust:[['AI may act','AI suggests only',42,'automate within typed contracts; commits gate'],['Trusts defaults','Demands evidence',26,'show the schema, the event, the failure mode']], moods:[['Engaged','warm · steady'],['Cautious','spruce-led · measured',true],['Skeptical','cool · probing'],['Impatient','warm flares · time-poor']] },
+];
+
+const TRY = {
+  francesco:['Where does this break at scale for you?',"What's the total cost to run, in your view?",'What would you need before approving a pilot?','How would you keep this auditable six months on?'],
+  fabio:['How would you gate the destructive tools?','How do you stop it hallucinating availability?','What would you put in the eval suite?','Where do you want the human in the loop?'],
+  owner:['Does the sold-out recovery actually save you the booking?',"Does the customer still feel like yours?",'Would the written proposal close faster for you?','Does this free your staff, or just move the work?'],
+  branch:['Could you run this with a family at the counter?','Is one screen really enough — no tab-switching?',"Do you trust the live availability it's showing?",'Is the gated hold quick enough mid-conversation?'],
+  specialist:['Does the ranking respect a bespoke brief?','Could you hand-pick each segment from this?','Is the ferry re-route recovery up to your standard?','Does the proposal read bespoke, not packaged?'],
+  giuseppe:['Does this sit cleanly on the existing estate?','Are the agent↔system contracts clear enough?','How does it fail, and how does it degrade?','Is there observability across the agents?'],
+};
+
+PEOPLE.forEach(p => {
+  p.sys = DEMO + ' You ARE ' + p.name + ' (' + p.role + ') — a synthetic validation persona ("' + p.archetype + '"). Speak in 2–4 sentences, in character, never as an AI. ' + (ROLE_SYS[p.id] || ROLE_SYS.owner);
+});
+const BY = Object.fromEntries(PEOPLE.map(p => [p.id, p]));
+
+/* ── HISTORY ── */
+const HK = 'scp_hist_v2';
+let hist = {};
+try { hist = JSON.parse(localStorage.getItem(HK)||'null')||{}; if(typeof hist!=='object') hist={}; } catch(e){}
+PEOPLE.forEach(p=>{ if(!Array.isArray(hist[p.id])) hist[p.id]=[]; });
+const saveH = () => { try{localStorage.setItem(HK,JSON.stringify(hist));}catch(e){} };
+const getH = id => hist[id]||[];
+const pushH = (id,m) => { if(!hist[id]) hist[id]=[]; hist[id].push(m); saveH(); };
+const clearH = id => { hist[id]=[]; saveH(); };
+
+/* ── API ── */
+const SK = 'alpi_anthropic_key';
+let pendK=[], ovOpen=false;
+function needKey() {
+  const s=localStorage.getItem(SK); if(s) return Promise.resolve(s);
+  return new Promise(r=>{ pendK.push(r); if(!ovOpen){ovOpen=true;document.getElementById('ov').classList.add('open');setTimeout(()=>document.getElementById('ov-key').focus(),80);} });
+}
+async function askP(id, q) {
+  const p=BY[id];
+  const msgs=[{role:'user',content:p.sys+'\n\nStay fully in character as '+p.name+' for the rest of this conversation.'},{role:'assistant',content:p.greet},...getH(id),{role:'user',content:q}];
+  pushH(id,{role:'user',content:q});
+  const key=await needKey();
+  const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1024,messages:msgs})});
+  if(!res.ok){const b=await res.json().catch(()=>({}));if(res.status===401)localStorage.removeItem(SK);throw new Error((b.error&&b.error.message)||'API error '+res.status);}
+  const d=await res.json(); const reply=(d.content&&d.content[0]&&d.content[0].text)||'…';
+  pushH(id,{role:'assistant',content:reply}); return reply.trim();
+}
+document.getElementById('ov-btn').addEventListener('click',submitKey);
+document.getElementById('ov-key').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();submitKey();}});
+function submitKey(){
+  const k=document.getElementById('ov-key').value.trim(),err=document.getElementById('ov-err');
+  if(!k){err.textContent='Please enter your API key.';return;}
+  if(!k.startsWith('sk-ant-')){err.textContent="That doesn't look like an Anthropic key — should start with sk-ant-.";return;}
+  localStorage.setItem(SK,k); document.getElementById('ov').classList.remove('open'); ovOpen=false;
+  const cbs=pendK.slice(); pendK=[]; cbs.forEach(r=>r(k));
+}
+
+/* ── HELPERS ── */
+const inits = n => { const w=n.trim().split(/\s+/); return (w[0][0]+(w[1]?w[1][0]:'')).toUpperCase(); };
+
+function mkAva(p, size, radius, extraStyle) {
+  const s = `width:${size}px;height:${size}px;border-radius:${radius};flex-shrink:0;${extraStyle||''}`;
+  if (p.img) {
+    const img = document.createElement('img');
+    img.src = p.img; img.alt = ''; img.style.cssText = s + 'object-fit:cover;display:block;';
+    img.onerror = () => img.replaceWith(mkInit(p, size, radius, extraStyle));
+    return img;
+  }
+  return mkInit(p, size, radius, extraStyle);
+}
+function mkInit(p, size, radius, extraStyle) {
+  const el = document.createElement('span');
+  el.style.cssText = `width:${size}px;height:${size}px;border-radius:${radius};display:inline-flex;align-items:center;justify-content:center;font-weight:600;font-size:${Math.round(size*.38)}px;color:#fff;background:linear-gradient(135deg,${p.tone},${p.tone}cc);flex-shrink:0;${extraStyle||''}`;
+  el.textContent = p.init || inits(p.name);
+  return el;
+}
+
+/* ── GRID ── */
+let cardMode = 'talk';
+const gridEl = document.getElementById('grid');
+
+function buildGrid() {
+  gridEl.innerHTML = '';
+  PEOPLE.forEach(p => {
+    const card = document.createElement('div');
+    card.className = 'card'; card.style.setProperty('--tone', p.tone);
+    // id row
+    const idRow = document.createElement('div'); idRow.className = 'card-id';
+    idRow.appendChild(mkAva(p, 48, '8px'));
+    const nm = document.createElement('div');
+    nm.innerHTML = `<span class="card-name">${p.name}</span><span class="card-role">${p.role}</span>`;
+    idRow.appendChild(nm);
+    // quote
+    const q = document.createElement('div'); q.className = 'card-quote';
+    q.textContent = '“' + p.quote + '”';
+    // foot
+    const foot = document.createElement('div'); foot.className = 'card-foot';
+    const tags = document.createElement('span'); tags.className = 'card-tags';
+    tags.textContent = [...p.tags, p.archetype].join(' · ');
+    const open = document.createElement('button'); open.className = 'card-open';
+    open.textContent = cardMode === 'talk' ? 'Talk ↗' : 'Profile ↗';
+    foot.appendChild(tags); foot.appendChild(open);
+    card.appendChild(idRow); card.appendChild(q); card.appendChild(foot);
+    card.addEventListener('click', () => openModal(p.id, cardMode));
+    gridEl.appendChild(card);
+  });
+}
+buildGrid();
+document.getElementById('seg').addEventListener('click', e => {
+  const btn = e.target.closest('button[data-m]'); if (!btn) return;
+  cardMode = btn.dataset.m;
+  document.querySelectorAll('#seg button').forEach(b => b.classList.toggle('on', b === btn));
+  buildGrid();
+});
+
+/* ── MODAL ── */
+let mId = null, mView = 'talk', orbAnim = null, orbLive = false;
+
+function openModal(id, view) {
+  mId = id; mView = view || 'talk';
+  const p = BY[id];
+  document.getElementById('mbar-name').textContent = p.name;
+  document.getElementById('mbar-role').textContent = p.role;
+  document.getElementById('mbar-code').textContent = p.code + ' · synthetic · ' + p.idx + '/' + PEOPLE.length;
+  document.getElementById('btn-close').style.background = p.tone;
+  syncSeg();
+  renderBody();
+  document.getElementById('modal').classList.add('open');
+}
+function closeModal() {
+  document.getElementById('modal').classList.remove('open');
+  stopOrb();
+}
+function syncSeg() {
+  document.querySelectorAll('#mseg button').forEach(b => b.classList.toggle('on', b.dataset.v === mView));
+}
+
+document.getElementById('modal').addEventListener('click', e => { if (e.target === document.getElementById('modal')) closeModal(); });
+document.getElementById('btn-back').addEventListener('click', closeModal);
+document.getElementById('btn-close').addEventListener('click', closeModal);
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+document.getElementById('btn-prev').addEventListener('click', () => {
+  const i = PEOPLE.findIndex(x => x.id === mId); mId = PEOPLE[(i-1+PEOPLE.length)%PEOPLE.length].id; openModal(mId, mView);
+});
+document.getElementById('btn-next').addEventListener('click', () => {
+  const i = PEOPLE.findIndex(x => x.id === mId); mId = PEOPLE[(i+1)%PEOPLE.length].id; openModal(mId, mView);
+});
+document.getElementById('mseg').addEventListener('click', e => {
+  const btn = e.target.closest('button[data-v]'); if (!btn) return;
+  mView = btn.dataset.v; syncSeg(); renderBody();
+});
+
+function renderBody() {
+  const p = BY[mId], body = document.getElementById('mbody');
+  stopOrb();
+  if (mView === 'profile') {
+    body.className = 'mbody profile';
+    body.innerHTML = buildProfile(p);
+  } else {
+    body.className = 'mbody talk';
+    body.innerHTML = '';
+    body.appendChild(buildTalkLeft(p));
+    body.appendChild(buildTalkRight(p));
+    requestAnimationFrame(() => startOrb(document.getElementById('morb'), p));
+  }
+}
+
+/* ── PROFILE ── */
+function buildProfile(p) {
+  const goalHTML = p.goals.map((g,i)=>`<div class="goal"><span class="goal-n" style="color:${p.tone}">0${i+1}</span><div><div class="goal-t">${g[0]}</div><div class="goal-d">${g[1]}</div></div></div>`).join('');
+  const frustHTML = p.frustrations.map(f=>`<div class="frust ${f[0]}"><div class="frust-t">${f[1]}</div><div class="frust-d">${f[2]}</div></div>`).join('');
+  const trustHTML = p.trust.map(t=>`
+    <div class="trust-row">
+      <div class="trust-lbls"><span>${t[0]}</span><span>${t[1]}</span></div>
+      <div class="trust-track" style="background:${p.toneSoft}"><span class="trust-dot" style="left:${t[2]}%;border-color:${p.tone}"></span></div>
+      <div class="trust-note">${t[3]}</div>
+    </div>`).join('');
+  const ctxHTML = p.context.map(r=>`<div class="ctx-row"><span class="ctx-k">${r[0]}</span><span class="ctx-v">${r[1]}</span></div>`).join('');
+  const pillHTML = [...p.tags, p.archetype].map(t=>`<span class="bio-pill">${t}</span>`).join('');
+  const avaHTML = p.img
+    ? `<img class="bio-img" src="${p.img}" alt="" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'bio-init',textContent:'${p.init||inits(p.name)}',style:'width:88px;height:88px;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;font-size:30px;font-weight:600;color:#fff;background:${p.tone}'}))">`
+    : `<span class="bio-init" style="background:linear-gradient(135deg,${p.tone},${p.tone}cc)">${p.init||inits(p.name)}</span>`;
+  return `<div class="prof">
+    <div class="prof-eyb">
+      <span class="prof-badge">PEOPLE</span>
+      <span class="prof-eyb-txt">Synthetic persona ${String(p.idx).padStart(2,'0')} / ${PEOPLE.length} · Composite, not a real person</span>
+    </div>
+    <h2 class="prof-h2">${p.name} — ${p.role.split(' · ')[0]}</h2>
+    <div class="bio">
+      <div class="bio-ava-col">
+        ${avaHTML}
+        <div class="bio-name">${p.name}</div>
+        <div class="bio-pron">${p.pron}</div>
+        <div class="bio-pills">${pillHTML}</div>
+        <div class="bio-code">${p.code} · v0.1 · synthetic</div>
+      </div>
+      <div class="bio-main">
+        <div class="bio-q"><span class="bio-qm" style="color:${p.tone}">"</span>${p.quote}</div>
+        <div class="bio-text">${p.bio}</div>
+      </div>
+      <div class="bio-ctx">
+        <div class="ctx-hd">Context</div>
+        ${ctxHTML}
+      </div>
+    </div>
+    <div class="pcols">
+      <div class="pcol"><div class="pcol-eyb">Goals · Ranked</div><div class="pcol-h">What ${p.name.split(' ')[0]} wants</div>${goalHTML}</div>
+      <div class="pcol"><div class="pcol-eyb">Frustrations</div><div class="pcol-h">What gets in the way</div>${frustHTML}</div>
+      <div class="pcol"><div class="pcol-eyb">AI Trust Threshold</div><div class="pcol-h">Working with the agent</div>${trustHTML}</div>
+    </div>
+    <div style="font-size:11px;color:#9CA3AF;text-align:center;padding:8px 0 4px">Alpitour World · Kyndryl Agentic Framework · Characteristic composite, not a record of a real person.</div>
+  </div>`;
+}
+
+/* ── TALK LEFT (orb panel) ── */
+function buildTalkLeft(p) {
+  const activeMood = p.moods.find(m => m[2]);
+  const moodTiles = p.moods.map(m => `<div class="mood-tile${m[2]?' active':''}"><b>${m[0]}</b><span>${m[1]}</span></div>`).join('');
+  const div = document.createElement('div'); div.className = 'tleft';
+  div.style.setProperty('--tone', p.tone); div.style.setProperty('--tone-soft', p.toneSoft);
+  div.innerHTML = `
+    <div class="tleft-bar">
+      <span style="display:inline-flex;align-items:center;gap:6px"><i style="width:6px;height:6px;border-radius:50%;background:${p.tone};display:block"></i>${p.name.toUpperCase()} · SYNTHETIC EMBODIMENT</span>
+      <span>MOOD · ${p.moodLine}</span>
+    </div>
+    <div class="orb-area"><canvas id="morb"></canvas></div>
+    <div class="tleft-status">
+      <div class="tstatus-row">
+        <div class="tstatus-ico" style="border:2px solid ${p.tone};background:${p.toneSoft};color:${p.tone}">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+        </div>
+        <div><div class="tstatus-lbl" id="slbl">Listening</div><div class="tstatus-sub">grounded in the brief · ${p.tags.join(' · ')}</div></div>
+      </div>
+      <div class="mood-grid">${moodTiles}</div>
+    </div>
+    <div class="tleft-foot">
+      <div class="tleft-quote">"${p.quote}"</div>
+      <div class="tleft-note">Built from the validation brief · synthetic, not a real person.</div>
+    </div>`;
+  return div;
+}
+
+/* ── TALK RIGHT (chat) ── */
+function buildTalkRight(p) {
+  const div = document.createElement('div'); div.className = 'tright';
+  div.style.setProperty('--tone', p.tone);
+
+  const msgs = document.createElement('div'); msgs.className = 'chat-msgs';
+  const h = getH(p.id);
+  let chipsHidden = h.length > 0;
+  const initMsgs = h.length > 0 ? h : [{role:'assistant',content:p.greet}];
+  initMsgs.forEach(m => appendCMsg(msgs, m, p));
+  msgs.scrollTop = msgs.scrollHeight;
+
+  const chipsDiv = document.createElement('div'); chipsDiv.className = 'cchips';
+  if (!chipsHidden) renderChips(chipsDiv, p.id, p, sendFn);
+
+  const bar = document.createElement('div'); bar.className = 'cinput-bar';
+  const ta = document.createElement('textarea'); ta.className = 'cta'; ta.rows = 1;
+  ta.placeholder = 'Ask ' + p.name.split(' ')[0] + ' anything…';
+  const ask = document.createElement('button'); ask.className = 'cask'; ask.textContent = 'Ask';
+  bar.appendChild(ta); bar.appendChild(ask);
+
+  const foot = document.createElement('div'); foot.className = 'cfoot';
+  const note = document.createElement('span'); note.className = 'cfoot-note'; note.textContent = 'Answers are a synthetic stand-in grounded in the validation brief.';
+  const clr = document.createElement('button'); clr.className = 'cclear'; clr.textContent = 'Clear chat';
+  clr.addEventListener('click', () => {
+    clearH(p.id); chipsHidden = false;
+    msgs.innerHTML = ''; appendCMsg(msgs, {role:'assistant',content:p.greet}, p);
+    msgs.scrollTop = msgs.scrollHeight;
+    chipsDiv.innerHTML = ''; renderChips(chipsDiv, p.id, p, sendFn);
+  });
+  foot.appendChild(note); foot.appendChild(clr);
+  div.appendChild(msgs); div.appendChild(chipsDiv); div.appendChild(bar); div.appendChild(foot);
+
+  ta.addEventListener('input', () => { ta.style.height='auto'; ta.style.height=Math.min(ta.scrollHeight,96)+'px'; });
+  ta.addEventListener('keydown', e => { if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendFn();} });
+  ask.addEventListener('click', () => sendFn());
+
+  async function sendFn(q) {
+    const text = (q ?? ta.value).trim(); if (!text || ask.disabled) return;
+    chipsHidden = true; chipsDiv.innerHTML = '';
+    ta.value = ''; ta.style.height = 'auto'; ask.disabled = true;
+    appendCMsg(msgs, {role:'user',content:text}, p);
+    msgs.scrollTop = msgs.scrollHeight;
+    const dr = mkDots(p); msgs.appendChild(dr); msgs.scrollTop = msgs.scrollHeight;
+    const sl = document.getElementById('slbl'); if(sl) sl.textContent = 'Speaking · live';
+    orbLive = true;
+    try {
+      const reply = await askP(p.id, text);
+      dr.remove(); appendCMsg(msgs, {role:'assistant',content:reply}, p); msgs.scrollTop = msgs.scrollHeight;
+    } catch(e) {
+      dr.remove(); appendCMsg(msgs, {role:'assistant',content:"(Couldn't reach me just now — try again.)"}, p); msgs.scrollTop = msgs.scrollHeight;
+    }
+    ask.disabled = false; orbLive = false;
+    if(sl) sl.textContent = 'Listening';
+    setTimeout(() => ta.focus(), 60);
+  }
+  return div;
+}
+
+function appendCMsg(container, m, p) {
+  const row = document.createElement('div'); row.className = 'cmsg ' + (m.role==='user'?'user':'ai');
+  if (m.role==='assistant') row.appendChild(mkAva(p, 24, '50%', 'align-self:flex-end;'));
+  const inner = document.createElement('div');
+  const lbl = document.createElement('div'); lbl.className = 'cmsg-label';
+  lbl.style.color = m.role==='assistant' ? p.tone : '#4B5563';
+  lbl.textContent = m.role==='assistant' ? p.name.split(' ')[0].toUpperCase() : 'YOU';
+  const body = document.createElement('div'); body.className = 'cmsg-body'; body.textContent = m.content;
+  inner.appendChild(lbl); inner.appendChild(body); row.appendChild(inner); container.appendChild(row);
+}
+function renderChips(container, id, p, fn) {
+  container.innerHTML = '';
+  const chips = TRY[id]||[]; if(!chips.length) return;
+  const lbl = document.createElement('span'); lbl.className = 'cchips-lbl'; lbl.textContent = 'Try asking'; container.appendChild(lbl);
+  chips.forEach(c => { const b=document.createElement('button'); b.className='cchip'; b.textContent=c; b.addEventListener('click',()=>fn(c)); container.appendChild(b); });
+}
+function mkDots(p) {
+  const row = document.createElement('div'); row.className = 'cmsg ai';
+  const d = document.createElement('div'); d.className = 'cdots';
+  [0,150,300].forEach(delay => { const b=document.createElement('i'); b.className='cdot'; b.style.cssText=`background:${p.tone};animation:scp-b 1.2s ease-in-out ${delay}ms infinite`; d.appendChild(b); });
+  row.appendChild(d); return row;
+}
+
+/* ── ORB — Luminous 3-D Fibonacci sphere with spiral arms ── */
+const GOLDEN_ANGLE = Math.PI * (3 - Math.sqrt(5));
+
+const ORB_PALETTES = {
+  engaged: {
+    hues: ['#E94B4B','#FF8766','#FFB46A','#E68A00','#46B7C7','#3E8AC2','#5C6A73','#29707A'],
+    coreTint: 'rgba(255,255,255,0.92)', halo: 'rgba(255,200,160,0.32)',
+    bg: 'linear-gradient(135deg,#F7F0EC 0%,#FBF5F0 45%,#FDFAF8 100%)',
+  },
+  cautious: {
+    hues: ['#2C6FA0','#3E8AC2','#29707A','#5BA2AE','#5C6A73','#3D8590','#FF6647'],
+    coreTint: 'rgba(255,255,255,0.94)', halo: 'rgba(91,162,174,0.28)',
+    bg: 'linear-gradient(135deg,#EFF6F8 0%,#F5F9FA 45%,#F8FCFC 100%)',
+  },
+  drift: {
+    hues: ['#5C6A73','#4F5A63','#6B7780','#98A3AB','#3E8AC2','#5BA2AE'],
+    coreTint: 'rgba(255,255,255,0.86)', halo: 'rgba(120,150,175,0.22)',
+    bg: 'linear-gradient(135deg,#F0F3F5 0%,#F5F7F9 45%,#F9FAFB 100%)',
+  },
+  agitated: {
+    hues: ['#FF462D','#E63A22','#FF6647','#FF8766','#E68A00','#5C6A73'],
+    coreTint: 'rgba(255,255,255,0.94)', halo: 'rgba(255,120,90,0.34)',
+    bg: 'linear-gradient(135deg,#F7E8E0 0%,#FBF1EC 45%,#FDFAF8 100%)',
+  },
+};
+
+const MOOD_MAP = ['engaged','cautious','drift','agitated'];
+
+function hexToRgba(hex, a) {
+  const h = hex.replace('#','');
+  return `rgba(${parseInt(h.slice(0,2),16)},${parseInt(h.slice(2,4),16)},${parseInt(h.slice(4,6),16)},${a})`;
+}
+
+function drawCoreOrb(ctx, cx, cy, R, amp, pal) {
+  const haloR = R * (0.62 + amp * 0.06);
+  const halo = ctx.createRadialGradient(cx, cy, 0, cx, cy, haloR);
+  halo.addColorStop(0, pal.halo);
+  halo.addColorStop(0.5, pal.halo.replace(/[\d.]+\)$/, '0.10)'));
+  halo.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = halo; ctx.beginPath(); ctx.arc(cx, cy, haloR, 0, Math.PI*2); ctx.fill();
+
+  const coreR = R * (0.16 + amp * 0.03);
+  const core = ctx.createRadialGradient(cx, cy, 0, cx, cy, coreR);
+  core.addColorStop(0,    pal.coreTint);
+  core.addColorStop(0.55, 'rgba(255,255,255,0.55)');
+  core.addColorStop(0.85, 'rgba(255,255,255,0.18)');
+  core.addColorStop(1,    'rgba(255,255,255,0)');
+  ctx.fillStyle = core; ctx.beginPath(); ctx.arc(cx, cy, coreR, 0, Math.PI*2); ctx.fill();
+
+  for (let i = 0; i < 28; i++) {
+    const a = Math.random() * Math.PI * 2, r = Math.sqrt(Math.random()) * coreR * 0.65;
+    ctx.fillStyle = hexToRgba(pal.hues[i % pal.hues.length], 0.32 + Math.random() * 0.22);
+    ctx.fillRect(cx + Math.cos(a)*r, cy + Math.sin(a)*r, 1, 1);
+  }
+}
+
+function drawVU(ctx, W, H, amp, accentColor) {
+  const BARS = 20, barH = 5, gap = 3, x = W - 14, totalH = BARS * (barH + gap);
+  const startY = H / 2 - totalH / 2;
+  for (let i = 0; i < BARS; i++) {
+    const threshold = (i + 1) / BARS;
+    const on = amp > threshold;
+    const hot = i >= BARS - 5;
+    ctx.fillStyle = on ? (hot ? accentColor : 'rgba(20,20,30,0.55)') : 'rgba(20,20,30,0.10)';
+    const y = startY + (BARS - 1 - i) * (barH + gap);
+    ctx.beginPath(); ctx.roundRect(x, y, 4, barH, 1); ctx.fill();
+  }
+}
+
+function stopOrb() {
+  if (orbAnim) { cancelAnimationFrame(orbAnim); orbAnim = null; }
+  if (stopOrb._cleanup) { stopOrb._cleanup(); stopOrb._cleanup = null; }
+}
+
+function startOrb(canvas, p) {
+  stopOrb();
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const area = canvas.parentElement;
+  const DENSITY = 3200;
+
+  const st = {
+    particles: [], mouse: { x: null, y: null, hold: false, inside: false },
+    pulses: [], t0: 0, amp: 0, targetAmp: 0,
+    rotY: 0, rotX: -0.25,
+    moodIdx: p.moods.findIndex(m => m[2]) < 0 ? 0 : p.moods.findIndex(m => m[2]),
+    palette: null,
+  };
+  st.palette = ORB_PALETTES[MOOD_MAP[st.moodIdx]];
+  area.style.background = st.palette.bg;
+
+  let W = 0, H = 0, R = 0, cx = 0, cy = 0;
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+  let orbImgEl = null;
+  if (p.img) {
+    const img = new Image(); img.src = p.img;
+    img.onload = () => { orbImgEl = img; };
+  }
+
+  function initParticles() {
+    const pal = st.palette; const arr = [];
+    const N_SHELL = Math.floor(DENSITY * 0.70);
+    const N_ARM   = Math.floor(DENSITY * 0.22);
+    const N_DUST  = DENSITY - N_SHELL - N_ARM;
+    const HL = pal.hues.length;
+
+    for (let i = 0; i < N_SHELL; i++) {
+      const phi = Math.acos(1 - 2*(i+0.5)/N_SHELL), theta = i * GOLDEN_ANGLE;
+      const ab = Math.pow(Math.max(0, Math.cos(theta - phi*4)), 3);
+      const rad = 0.86 + ab*0.18;
+      const hi = Math.floor(((theta%(2*Math.PI)+2*Math.PI)%(2*Math.PI)) / (2*Math.PI/HL));
+      arr.push({ kind:'shell', theta, phi, radius:rad, x:Math.sin(phi)*Math.cos(theta)*rad, y:Math.cos(phi)*rad, z:Math.sin(phi)*Math.sin(theta)*rad, hi, color:pal.hues[hi%HL], size:0.7+Math.random()*0.9, phase:Math.random()*Math.PI*2, mx:0, my:0 });
+    }
+    for (let i = 0; i < N_ARM; i++) {
+      const phi = Math.PI/2+(Math.random()-0.5)*1.7, theta = i*GOLDEN_ANGLE*1.7+Math.random()*0.4;
+      const ab = Math.pow(Math.max(0, Math.cos((theta-phi*6)*0.6)), 2);
+      const rad = 1.0+ab*0.55+Math.random()*0.05;
+      const hi = Math.floor(((theta%(2*Math.PI)+2*Math.PI)%(2*Math.PI)) / (2*Math.PI/HL));
+      arr.push({ kind:'arm', theta, phi, radius:rad, x:Math.sin(phi)*Math.cos(theta)*rad, y:Math.cos(phi)*rad, z:Math.sin(phi)*Math.sin(theta)*rad, hi, color:pal.hues[hi%HL], size:0.55+Math.random()*0.7, phase:Math.random()*Math.PI*2, mx:0, my:0 });
+    }
+    for (let i = 0; i < N_DUST; i++) {
+      const a = Math.random()*Math.PI*2, r = 1.3+Math.pow(Math.random(),2)*0.9;
+      const hi = Math.floor(Math.random()*HL);
+      arr.push({ kind:'dust', theta:a, phi:0, radius:r, x:Math.cos(a)*r, y:(Math.random()-0.5)*1.6, z:Math.sin(a)*r, hi, color:pal.hues[hi], size:0.5+Math.random()*0.7, phase:Math.random()*Math.PI*2, mx:0, my:0 });
+    }
+    st.particles = arr;
+  }
+
+  function resize() {
+    const rect = area.getBoundingClientRect();
+    W = rect.width; H = rect.height;
+    canvas.width = Math.floor(W*dpr); canvas.height = Math.floor(H*dpr);
+    canvas.style.width = W+'px'; canvas.style.height = H+'px';
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    cx = W/2; cy = H/2; R = Math.min(W,H)*0.5*0.62;
+    if (!st.particles.length) initParticles();
+  }
+
+  // Mood tile click handler
+  const tiles = area.closest('.tleft') && area.closest('.tleft').querySelectorAll('.mood-tile');
+  if (tiles) tiles.forEach((tile, idx) => {
+    tile.addEventListener('click', () => {
+      tiles.forEach(t => t.classList.remove('active')); tile.classList.add('active');
+      st.moodIdx = idx; st.palette = ORB_PALETTES[MOOD_MAP[idx]] || ORB_PALETTES.engaged;
+      area.style.background = st.palette.bg;
+      st.particles.forEach(pt => { pt.color = st.palette.hues[pt.hi % st.palette.hues.length]; });
+    });
+  });
+
+  function sampleAmp(t) {
+    if (!orbLive) return 0.05 + Math.sin(t*0.5)*0.03;
+    const lfo = Math.sin(t*0.8)*0.5+0.5;
+    const syll = Math.max(0, Math.sin(t*5.0+Math.sin(t*1.4)*2));
+    const burst = Math.pow(Math.max(0, Math.sin(t*3.2)), 6)*0.6;
+    return Math.min(1, 0.20+lfo*0.18+syll*0.38+burst);
+  }
+
+  const onMove  = e => { const r=area.getBoundingClientRect(); st.mouse.x=e.clientX-r.left; st.mouse.y=e.clientY-r.top; st.mouse.inside=true; };
+  const onLeave = () => { st.mouse.inside=false; };
+  const onDown  = e => { st.mouse.hold=true; st.pulses.push({t:0}); onMove(e); };
+  const onUp    = () => { st.mouse.hold=false; };
+  area.addEventListener('pointermove', onMove);
+  area.addEventListener('pointerleave', onLeave);
+  area.addEventListener('pointerdown', onDown);
+  window.addEventListener('pointerup', onUp);
+
+  const ro = new ResizeObserver(resize); ro.observe(area); resize();
+
+  stopOrb._cleanup = () => {
+    ro.disconnect();
+    area.removeEventListener('pointermove', onMove);
+    area.removeEventListener('pointerleave', onLeave);
+    area.removeEventListener('pointerdown', onDown);
+    window.removeEventListener('pointerup', onUp);
+    area.style.background = '';
+  };
+
+  function tick(now) {
+    if (!st.t0) st.t0 = now;
+    const t = (now - st.t0) / 1000, dt = 1/60;
+    const pal = st.palette;
+    st.targetAmp = sampleAmp(t); st.amp += (st.targetAmp - st.amp)*0.15;
+    const amp = st.amp;
+    st.rotY += dt*(0.12+amp*0.10);
+    for (let i = st.pulses.length-1; i >= 0; i--) { st.pulses[i].t += dt; if(st.pulses[i].t>1.6) st.pulses.splice(i,1); }
+
+    ctx.clearRect(0,0,W,H);
+    drawCoreOrb(ctx, cx, cy, R, amp, pal);
+
+    for (let k = 0; k < st.pulses.length; k++) {
+      const pu = st.pulses[k];
+      ctx.strokeStyle = hexToRgba(p.tone, Math.max(0, 0.40-pu.t*0.30));
+      ctx.lineWidth = 1.4;
+      ctx.beginPath(); ctx.arc(cx, cy, R*(0.5+pu.t*1.4), 0, Math.PI*2); ctx.stroke();
+    }
+
+    const cY=Math.cos(st.rotY), sY=Math.sin(st.rotY), cX=Math.cos(st.rotX), sX=Math.sin(st.rotX);
+    const focal=2.4, camZ=2.6;
+    const mx=st.mouse.inside?st.mouse.x:null, my=st.mouse.inside?st.mouse.y:null;
+    let pulseR=0;
+    for (let k=0;k<st.pulses.length;k++) pulseR+=Math.exp(-Math.pow((st.pulses[k].t-0.5)/0.30,2))*0.18;
+
+    const parts = st.particles;
+    for (let i = 0; i < parts.length; i++) {
+      const pt = parts[i];
+      const br = 1+amp*0.05+Math.sin(t*1.2+pt.phase)*0.01+pulseR;
+      const px=pt.x*br, py=pt.y*br, pz=pt.z*br;
+      const rx1=px*cY+pz*sY, rz1=-px*sY+pz*cY;
+      const ry2=py*cX-rz1*sX, rz2=py*sX+rz1*cX, rx2=rx1;
+      const sc=focal/(camZ-rz2);
+      let sx=cx+rx2*R*sc+pt.mx, sy=cy+ry2*R*sc+pt.my;
+      if (mx!==null) {
+        const dx=sx-mx, dy=sy-my, d=Math.hypot(dx,dy), range=st.mouse.hold?220:130;
+        if (d<range&&d>1) { const k2=(1-d/range); if(st.mouse.hold){pt.mx-=(dx/d)*k2*1.6;pt.my-=(dy/d)*k2*1.6;}else{pt.mx+=(dx/d)*k2*1.2;pt.my+=(dy/d)*k2*1.2;} }
+      }
+      pt.mx*=0.92; pt.my*=0.92; sx+=pt.mx; sy+=pt.my;
+      if (sx<-10||sx>W+10||sy<-10||sy>H+10) continue;
+      const depth=(rz2+1.4)/2.8, dot=Math.max(0.06,depth);
+      const coreFall=Math.min(1,Math.max(0.55,(Math.hypot(sx-cx,sy-cy)-R*0.12)/(R*0.18)));
+      const baseA=pt.kind==='dust'?0.42:pt.kind==='arm'?0.78:0.92;
+      ctx.fillStyle=hexToRgba(pt.color,Math.min(0.95,baseA*dot*coreFall*(0.65+amp*0.25)));
+      ctx.beginPath(); ctx.arc(sx,sy,pt.size*(0.5+dot*1.1),0,Math.PI*2); ctx.fill();
+    }
+
+    // Photo / initials circle — drawn after particles so it's always legible
+    const photoR = R * 0.26;
+    if (orbImgEl) {
+      ctx.save();
+      // subtle shadow ring
+      ctx.shadowColor = 'rgba(0,0,0,0.18)'; ctx.shadowBlur = 10;
+      ctx.beginPath(); ctx.arc(cx, cy, photoR+1.5, 0, Math.PI*2);
+      ctx.fillStyle='rgba(255,255,255,0.9)'; ctx.fill();
+      ctx.shadowBlur = 0;
+      ctx.beginPath(); ctx.arc(cx, cy, photoR, 0, Math.PI*2); ctx.clip();
+      ctx.drawImage(orbImgEl, cx-photoR, cy-photoR, photoR*2, photoR*2);
+      ctx.restore();
+    } else {
+      // white disc + initials
+      ctx.save();
+      ctx.shadowColor='rgba(0,0,0,0.15)'; ctx.shadowBlur=10;
+      ctx.beginPath(); ctx.arc(cx, cy, photoR, 0, Math.PI*2);
+      ctx.fillStyle='rgba(255,255,255,0.92)'; ctx.fill();
+      ctx.shadowBlur=0;
+      ctx.fillStyle = p.tone;
+      ctx.font = `600 ${Math.round(photoR*0.6)}px "TWK Everett", system-ui`;
+      ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.fillText(p.init || inits(p.name), cx, cy);
+      ctx.restore();
+    }
+    // accent ring around photo
+    ctx.beginPath(); ctx.arc(cx, cy, photoR, 0, Math.PI*2);
+    ctx.strokeStyle = hexToRgba(p.tone, orbLive ? 0.8 : 0.4);
+    ctx.lineWidth = orbLive ? 2.5 : 1.5; ctx.stroke();
+
+    drawVU(ctx, W, H, amp, p.tone);
+    orbAnim = requestAnimationFrame(tick);
+  }
+  orbAnim = requestAnimationFrame(tick);
+}
+</script>
+</body>
+</html>
