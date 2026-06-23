@@ -60,7 +60,7 @@ const ACTIONS: Record<string, (p: any) => void> = {
 
 export const DXLive = {
   get() { return state; },
-  subscribe(fn: () => void) { subs.add(fn); return () => subs.delete(fn); },
+  subscribe(fn: () => void) { subs.add(fn); return () => { subs.delete(fn); }; },
   dispatch(action: string, payload?: any) { const fn = ACTIONS[action]; if (fn) { fn(payload || {}); emit(); } },
   use() {
     const [, force] = useState(0);
