@@ -7,25 +7,11 @@ import { createRoot } from 'react-dom/client';
 import { PEOPLE, BY, TRY, askPersona, getHist, pushHist } from '@/cohort/personas';
 import { PersonaOrb } from '@/cohort/PersonaOrb';
 import type { Persona } from '@/shared/types';
-
-/* ---- helpers ---- */
-function initials(n: string) {
-  const w = n.trim().split(/\s+/);
-  return (w[0][0] + (w[1] ? w[1][0] : '')).toUpperCase();
-}
+import { AiIcon, AiTile } from '@/shared/AiIcon';
 
 function Avatar({ p, size, cls }: { p: Persona; size: number; cls?: string }) {
   if (p.img) return <img className={cls ?? ''} src={p.img + '?v=3'} alt="" style={{ width: size, height: size, borderRadius: '50%', objectFit: 'cover', display: 'block' }} />;
-  return (
-    <span className={'scp-init ' + (cls ?? '')} style={{
-      width: size, height: size, fontSize: Math.round(size * 0.4),
-      background: p.toneSoft, color: p.tone, display: 'inline-flex',
-      alignItems: 'center', justifyContent: 'center', borderRadius: '50%',
-      fontWeight: 600, flexShrink: 0, boxSizing: 'border-box',
-    }}>
-      {(p as any).init || initials(p.name)}
-    </span>
-  );
+  return <AiTile className={`scp-init ${cls ?? ''}`} size={size} />;
 }
 
 /* ---- chat panel ---- */
@@ -157,6 +143,7 @@ function PersonaModal({ id, initialView, onClose, onNav }: {
           <button className="scp-back" onClick={onClose} style={{ border: '1px solid rgba(255,255,255,.16)', background: 'transparent', color: '#D4DCDF', fontFamily: 'inherit', fontSize: 12.5, fontWeight: 600, padding: '7px 12px', borderRadius: 9, cursor: 'pointer' }}>
             ‹ Cohort
           </button>
+          <AiTile size={30} />
           <span style={{ fontFamily: 'var(--font-display,system-ui)', fontSize: 21, fontWeight: 600 }}>{p.name}</span>
           <span style={{ fontSize: 12.5, color: '#9AA7AD' }}>{p.role}</span>
           <span style={{ fontSize: 11, color: '#6E7C82', letterSpacing: '.02em' }}>{p.code} · synthetic · {p.idx}/{PEOPLE.length}</span>
@@ -187,7 +174,7 @@ function PersonaModal({ id, initialView, onClose, onNav }: {
             <div style={{ position: 'relative', background: '#fff', borderRadius: 16, overflow: 'hidden', display: 'flex', flexDirection: 'column', color: '#1F2A30' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 16px', fontSize: 10, fontWeight: 700, letterSpacing: '.08em', textTransform: 'uppercase', color: '#64748B' }}>
                 <span style={{ display: 'inline-flex', alignItems: 'center', gap: 7 }}>
-                  <b style={{ width: 7, height: 7, borderRadius: '50%', background: p.tone, display: 'block' }} />
+                  <AiIcon size={14} />
                   {p.name.toUpperCase()} · SYNTHETIC EMBODIMENT
                 </span>
                 <span>MOOD · {p.moodLine}</span>
@@ -196,9 +183,7 @@ function PersonaModal({ id, initialView, onClose, onNav }: {
               <PersonaOrb p={p} isLive={status === 'thinking'} />
               <div style={{ padding: '14px 16px 16px', borderTop: '1px solid #EEF2F4' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 11 }}>
-                  <div style={{ width: 38, height: 38, borderRadius: '50%', border: `2px solid ${p.tone}`, background: p.toneSoft, color: p.tone, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
-                  </div>
+                  <AiTile size={38} />
                   <div>
                     <div style={{ fontSize: 14, fontWeight: 600, color: '#1F2A30' }}>{status === 'thinking' ? 'Speaking · live' : 'Listening'}</div>
                     <div style={{ fontSize: 10.5, color: '#64748B', letterSpacing: '.04em' }}>grounded in the brief · {p.tags.join(' · ')}</div>
@@ -290,7 +275,7 @@ function PersonaModal({ id, initialView, onClose, onNav }: {
                 </div>
 
                 <div style={{ background: '#fff', border: '1px solid #E2E8F0', borderRadius: 14, padding: '18px 20px' }}>
-                  <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '.08em', textTransform: 'uppercase', color: '#64748B', marginBottom: 6 }}>AI trust threshold</div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 10, fontWeight: 700, letterSpacing: '.08em', textTransform: 'uppercase', color: '#64748B', marginBottom: 6 }}><AiIcon size={13} /> AI trust threshold</div>
                   <h4 style={{ margin: '0 0 14px', fontSize: 14, fontWeight: 600 }}>Working with the agent</h4>
                   {p.trust.map((t: any, i: number) => (
                     <div key={i} style={{ marginBottom: 14 }}>
@@ -345,12 +330,7 @@ function CohortApp() {
           onClick={() => setModal({ id: p.id, view: mode })}
         >
           <div className="ch-id">
-            {p.img
-              ? <img className="ava" src={p.img + '?v=3'} alt="" />
-              : <span className="init" style={{ background: `linear-gradient(135deg,${p.tone},${p.tone}cc)` }}>
-                  {(p as any).init || initials(p.name)}
-                </span>
-            }
+            {p.img ? <img className="ava" src={p.img + '?v=3'} alt="" /> : <AiTile className="init" size={60} radius={12} />}
             <span>
               <span className="nm">{p.name}</span>
               <span className="rl">{p.role}</span>
@@ -363,7 +343,7 @@ function CohortApp() {
           </div>
           <div className="ch-foot">
             <code>{p.code}</code>
-            <span className="talk">{mode === 'talk' ? 'Talk →' : 'Profile →'}</span>
+            <span className="talk"><AiIcon size={12} /> {mode === 'talk' ? 'Talk →' : 'Profile →'}</span>
           </div>
         </div>
       ))}
