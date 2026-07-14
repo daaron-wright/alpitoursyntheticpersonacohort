@@ -1,11 +1,11 @@
 /* ============================================================
-   Entry point · Alpitour Synthetic Cohort
+   Entry point · Anonymous Synthetic Persona Cohort
    Full React implementation — grid + persona modal (Talk/Profile)
    ============================================================ */
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { createRoot } from 'react-dom/client';
-import { PEOPLE, BY, TRY, askPersona, getHist, pushHist } from '@/alpitour/storefront/personas';
-import { PersonaOrb } from '@/alpitour/storefront/PersonaOrb';
+import { PEOPLE, BY, TRY, askPersona, getHist, pushHist } from '@/cohort/personas';
+import { PersonaOrb } from '@/cohort/PersonaOrb';
 import type { Persona } from '@/shared/types';
 
 /* ---- helpers ---- */
@@ -308,7 +308,7 @@ function PersonaModal({ id, initialView, onClose, onNav }: {
               </div>
 
               <div style={{ fontSize: 11, color: '#94A3B8', textAlign: 'center', padding: '8px 0 4px' }}>
-                Characteristic composite for demo validation — Alpitour World · Kyndryl Agentic Framework. Not a record of a real person.
+                Anonymous composite for demo validation · Kyndryl Agentic Framework. Not a record of a real person or organization.
               </div>
             </div>
           )}

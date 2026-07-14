@@ -1,6 +1,6 @@
 /* ============================================================
    PersonaOrb — animated 3D particle orb + dot-grid field
-   Port of the Kyndryl Vital PersonaOrb / startField canvas animation.
+   Animated Kyndryl Vital persona embodiment.
 
    Props:
      p       — Persona (for tone, orbMood, img)

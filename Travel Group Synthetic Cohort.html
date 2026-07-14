@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Alpitour · Synthetic Persona Cohort</title>
+  <title>Anonymous Travel Demo · Synthetic Persona Cohort</title>
   <link rel="stylesheet" href="assets/ds/colors_and_type.css" />
   <script src="assets/ds/icons/ki.js"></script>
   <style>
@@ -13,9 +13,7 @@
     .ch-eyb { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--k-spruce-70, #1F5A63); }
     .ch-wrap h1 { font-family: var(--font-display, system-ui); font-size: 38px; font-weight: 500; letter-spacing: -0.02em; margin: 8px 0 10px; }
     .ch-sub { font-size: 14.5px; color: var(--fg-2, #475569); max-width: 720px; line-height: 1.6; }
-    .ch-logos { display: flex; align-items: center; gap: 16px; flex-shrink: 0; }
-    .ch-logos img { height: 30px; display: block; }
-    .ch-logos .sep { width: 1px; height: 26px; background: var(--border-1, #E2E8F0); }
+    .ch-vital-logo { height: 30px; display: block; flex-shrink: 0; }
     .ch-note { font-size: 11.5px; color: var(--fg-muted, #64748B); margin: 18px 0 22px; display: inline-flex; align-items: center; gap: 7px; }
     .ch-note .d { width: 7px; height: 7px; border-radius: 50%; background: var(--k-warm-red-50, #FF462D); }
     .ch-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
@@ -45,17 +43,13 @@
       <div>
         <div class="ch-eyb">People · synthetic cohort</div>
         <h1>The voices in the room</h1>
-        <p class="ch-sub">A synthetic cohort for validating AlpiConcierge 2.0 — the stakeholders who govern and build it, and the travel advisors who live in it every day. Each is an AI stand-in, grounded in the demo brief. Open any one to interrogate their view, or read their profile.</p>
+        <p class="ch-sub">A fully anonymous synthetic cohort for validating a generic agent-assisted travel workflow — the roles that govern and build it, and the advisors who use it every day. Each persona is a fictional composite grounded in the demo brief. Open any role to explore its view or read its profile.</p>
         <div class="ch-seg" role="tablist">
           <button data-mode="talk" class="on">Open to Talk</button>
           <button data-mode="profile">Open to Profile</button>
         </div>
       </div>
-      <div class="ch-logos">
-        <img src="assets/alpitour-world.png" alt="Alpitour World" />
-        <span class="sep"></span>
-        <img src="alpitour/storefront/personas/kyndryl-vital-logo.png" alt="Kyndryl Vital" onerror="this.style.display='none'" />
-      </div>
+      <img class="ch-vital-logo" src="assets/kyndryl-vital-logo.png" alt="Kyndryl Vital" onerror="this.style.display='none'" />
     </div>
     <div class="ch-note"><span class="d"></span> Synthetic personas — composite stand-ins for validation, not records of real people.</div>
     <div class="ch-grid" id="ch-grid"></div>

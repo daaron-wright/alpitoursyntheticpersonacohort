@@ -20,17 +20,17 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        // Root — AlpiGPT 2.0 Guided Demo (served at /)
+        // Root — guided demo (served at /)
         'index': resolve(__dirname, 'index.html'),
-        // AlpiGPT Guided Demo (also reachable by filename)
+        // Guided demo (also reachable by filename)
         'guided-demo': resolve(__dirname, 'AlpiGPT 2.0 - Guided Demo.html'),
         // Synthetic Cohort — separate deployment
-        'cohort': resolve(__dirname, 'Alpitour Synthetic Cohort.html'),
+        'cohort': resolve(__dirname, 'Travel Group Synthetic Cohort.html'),
         // Additional migrated apps will be added here as they are completed:
         // 'storefront': resolve(__dirname, 'EasyBook Next - B2B Storefront.html'),
         // 'easybook': resolve(__dirname, 'EasyBook Next - AlpiGPT Workbench.html'),
         // 'platform': resolve(__dirname, 'Alpitour Platform.html'),
-        // 'cohort': resolve(__dirname, 'Alpitour Synthetic Cohort.html'),
+        // 'cohort': resolve(__dirname, 'Travel Group Synthetic Cohort.html'),
         // 'frontdoor': resolve(__dirname, 'Alpitour.it - AlpiGPT Front Door.html'),
         // 'frontdoor-simple': resolve(__dirname, 'Alpitour.it - Customer Front Door (Simple).html'),
         // 'concierge': resolve(__dirname, 'AlpiGPT B2B Concierge PoC.html'),
