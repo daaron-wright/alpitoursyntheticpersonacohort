@@ -25,7 +25,7 @@ const MIME_TYPES = {
   '.otf':  'font/otf',
 };
 
-const LANDING_PAGE = 'Alpitour Synthetic Cohort \u2014 Standalone.html';
+const LANDING_PAGE = 'Travel Group Synthetic Cohort \u2014 Standalone.html';
 
 const server = http.createServer((req, res) => {
   const url = new URL(req.url, `http://localhost:${PORT}`);

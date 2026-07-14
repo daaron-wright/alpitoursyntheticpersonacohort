@@ -6,8 +6,8 @@
    compact chat popup → full Talk / Profile modal.
    ============================================================ */
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { PEOPLE, BY, TRY, askPersona, getHist, clearHist } from './personas';
-import { PersonaOrb } from './PersonaOrb';
+import { PEOPLE, BY, TRY, askPersona, getHist, clearHist } from '@/cohort/personas';
+import { PersonaOrb } from '@/cohort/PersonaOrb';
 import type { Persona } from '@/shared/types';
 
 /* ---- helpers ---- */
