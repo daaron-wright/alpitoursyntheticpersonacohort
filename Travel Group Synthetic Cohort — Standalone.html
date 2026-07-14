@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
+<link rel="icon" href="assets/ds/icons/ai.svg" type="image/svg+xml"/>
 <title>Anonymous Travel Demo · Synthetic Persona Cohort</title>
 <link rel="stylesheet" href="assets/ds/colors_and_type.css"/>
 <style>
@@ -20,13 +21,16 @@ button, input, textarea, select { font-family: var(--tw); }
 .page { max-width: 1280px; margin: 0 auto; padding: 48px 32px 80px; }
 @media (max-width:640px) { .page { padding: 24px 16px 60px; } }
 .page-hd { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; flex-wrap: wrap; margin-bottom: 4px; }
-.page-eyb { font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #1F5A63; }
+.page-eyb { display: inline-flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #1F5A63; }
+.page-eyb img { width: 22px; height: 22px; }
 .page-h1 { font-size: 40px; font-weight: 500; letter-spacing: -.025em; margin: 8px 0 10px; color: #0F172A; line-height: 1.08; }
 @media (max-width:640px) { .page-h1 { font-size: 28px; } }
 .page-sub { font-size: 14.5px; color: #475569; max-width: 680px; line-height: 1.65; font-weight: 400; }
 .page-vital-logo { height: 28px; display: block; flex-shrink: 0; margin-top: 4px; }
-.page-note { font-size: 11.5px; color: #64748B; margin: 18px 0 26px; display: inline-flex; align-items: center; gap: 8px; }
+.page-note { font-size: 11.5px; color: #64748B; margin: 18px 0 26px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .page-dot { width: 7px; height: 7px; border-radius: 50%; background: #FF462D; flex-shrink: 0; }
+.ai-pill { display: inline-flex; align-items: center; gap: 6px; color: #1F5A63; background: rgba(41,112,122,.1); border-radius: 999px; padding: 5px 11px 5px 7px; font-weight: 600; }
+.ai-pill img { width: 15px; height: 15px; }
 .ch-seg { display: inline-flex; background: #fff; border: 1px solid #E2E8F0; border-radius: 999px; padding: 3px; margin-top: 16px; }
 .ch-seg button { border: none; background: transparent; font-family: var(--tw); font-size: 12px; font-weight: 600; color: #64748B; padding: 5px 14px; border-radius: 999px; cursor: pointer; transition: background .15s, color .15s; }
 .ch-seg button.on { background: #29707A; color: #fff; }
@@ -41,13 +45,13 @@ button, input, textarea, select { font-family: var(--tw); }
 .card:hover { border-color: var(--tone); box-shadow: 0 6px 22px rgba(15,23,42,.09); transform: translateY(-2px); }
 .card-id { display: flex; align-items: center; gap: 12px; }
 .card-ava { width: 48px; height: 48px; border-radius: 8px; flex-shrink: 0; object-fit: cover; display: block; }
-.card-init { width: 48px; height: 48px; border-radius: 8px; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; font-weight: 600; font-size: 17px; color: #fff; }
+.card-init { width: 48px; height: 48px; border-radius: 8px; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; color: #fff; background: #29707A; }
 .card-name { font-size: 15px; font-weight: 600; line-height: 1.2; color: #0F172A; display: block; }
 .card-role { font-size: 12px; color: #64748B; margin-top: 2px; display: block; font-weight: 400; }
 .card-quote { font-size: 14px; font-style: italic; line-height: 1.52; color: #374151; flex: 1; }
 .card-foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; border-top: 1px solid #F1F5F9; padding-top: 12px; min-height: 0; }
 .card-tags { font-size: 11px; color: #64748B; font-weight: 400; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.card-open { font-size: 11px; font-weight: 500; color: #374151; background: transparent; border: 1px solid #D1D5DB; border-radius: 6px; padding: 4px 10px; cursor: pointer; white-space: nowrap; flex-shrink: 0; transition: border-color .15s, color .15s; }
+.card-open { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 500; color: #1F5A63; background: rgba(41,112,122,.08); border: 1px solid rgba(41,112,122,.24); border-radius: 999px; padding: 4px 10px 4px 7px; cursor: pointer; white-space: nowrap; flex-shrink: 0; transition: border-color .15s, color .15s; }
 .card:hover .card-open { border-color: var(--tone); color: var(--tone); }
 
 /* ── MODAL SCRIM ── */
@@ -87,7 +91,7 @@ button, input, textarea, select { font-family: var(--tw); }
 @media (max-width:800px) { .bio { grid-template-columns: 1fr; } }
 .bio-ava-col { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
 .bio-img { width: 88px; height: 88px; border-radius: 10px; object-fit: cover; display: block; }
-.bio-init { width: 88px; height: 88px; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; font-size: 30px; font-weight: 600; color: #fff; }
+.bio-init { width: 88px; height: 88px; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; color: #fff; background: #29707A; }
 .bio-name { font-size: 15px; font-weight: 700; color: #0F172A; line-height: 1.25; }
 .bio-pron { font-size: 11.5px; color: #64748B; }
 .bio-pills { display: flex; flex-wrap: wrap; gap: 5px; }
@@ -193,7 +197,7 @@ button, input, textarea, select { font-family: var(--tw); }
 <div class="page">
   <div class="page-hd">
     <div>
-      <div class="page-eyb">People · synthetic cohort</div>
+      <div class="page-eyb"><img src="assets/ds/icons/ai.svg" alt=""/> People · synthetic cohort</div>
       <h1 class="page-h1">The voices in the room</h1>
       <p class="page-sub">A fully anonymous synthetic cohort for validating a generic agent-assisted travel workflow — the roles that govern and build it, and the advisors who use it every day. Each persona is a fictional composite grounded in the demo brief. Open any role to explore its view or read its profile.</p>
       <div class="ch-seg" id="seg">
@@ -203,7 +207,7 @@ button, input, textarea, select { font-family: var(--tw); }
     </div>
     <img class="page-vital-logo" src="assets/kyndryl-vital-logo.png" alt="Kyndryl Vital" onerror="this.style.display='none'"/>
   </div>
-  <div class="page-note"><span class="page-dot"></span> Synthetic personas — composite stand-ins for validation, not records of real people.</div>
+  <div class="page-note"><span class="ai-pill"><img src="assets/ds/icons/ai.svg" alt=""/> Powered by agentic AI</span><span><span class="page-dot" style="display:inline-block;margin-right:7px"></span>Synthetic personas — composite stand-ins for validation, not records of real people.</span></div>
   <div class="grid" id="grid"></div>
 </div>
 
@@ -319,22 +323,13 @@ function submitKey(){
 }
 
 /* ── HELPERS ── */
-const inits = n => { const w=n.trim().split(/\s+/); return (w[0][0]+(w[1]?w[1][0]:'')).toUpperCase(); };
+const aiMark = (size=20, inverse=false) => `<svg width="${size}" height="${size}" viewBox="0 0 32 32" aria-hidden="true"><path fill="${inverse?'#fff':'#29707A'}" d="M14 6 C14.9 12.9 19.6 17.6 26.5 18.5 C19.6 19.4 14.9 24.1 14 31 C13.1 24.1 8.4 19.4 1.5 18.5 C8.4 17.6 13.1 12.9 14 6 Z"></path><path fill="#FF462D" d="M24.5 1 C24.9 4.1 27 6.2 30.1 6.6 C27 7 24.9 9.1 24.5 12.2 C24.1 9.1 22 7 18.9 6.6 C22 6.2 24.1 4.1 24.5 1 Z"></path></svg>`;
 
 function mkAva(p, size, radius, extraStyle) {
-  const s = `width:${size}px;height:${size}px;border-radius:${radius};flex-shrink:0;${extraStyle||''}`;
-  if (p.img) {
-    const img = document.createElement('img');
-    img.src = p.img; img.alt = ''; img.style.cssText = s + 'object-fit:cover;display:block;';
-    img.onerror = () => img.replaceWith(mkInit(p, size, radius, extraStyle));
-    return img;
-  }
-  return mkInit(p, size, radius, extraStyle);
-}
-function mkInit(p, size, radius, extraStyle) {
   const el = document.createElement('span');
-  el.style.cssText = `width:${size}px;height:${size}px;border-radius:${radius};display:inline-flex;align-items:center;justify-content:center;font-weight:600;font-size:${Math.round(size*.38)}px;color:#fff;background:linear-gradient(135deg,${p.tone},${p.tone}cc);flex-shrink:0;${extraStyle||''}`;
-  el.textContent = p.init || inits(p.name);
+  el.style.cssText = `width:${size}px;height:${size}px;border-radius:${radius};display:inline-flex;align-items:center;justify-content:center;color:#fff;background:#29707A;flex-shrink:0;${extraStyle||''}`;
+  el.innerHTML = aiMark(Math.max(12,Math.round(size*.68)), true);
+  el.setAttribute('aria-hidden','true');
   return el;
 }
 
@@ -361,7 +356,7 @@ function buildGrid() {
     const tags = document.createElement('span'); tags.className = 'card-tags';
     tags.textContent = [...p.tags, p.archetype].join(' · ');
     const open = document.createElement('button'); open.className = 'card-open';
-    open.textContent = cardMode === 'talk' ? 'Talk ↗' : 'Profile ↗';
+    open.innerHTML = aiMark(12) + (cardMode === 'talk' ? 'Talk ↗' : 'Profile ↗');
     foot.appendChild(tags); foot.appendChild(open);
     card.appendChild(idRow); card.appendChild(q); card.appendChild(foot);
     card.addEventListener('click', () => openModal(p.id, cardMode));
@@ -440,9 +435,7 @@ function buildProfile(p) {
     </div>`).join('');
   const ctxHTML = p.context.map(r=>`<div class="ctx-row"><span class="ctx-k">${r[0]}</span><span class="ctx-v">${r[1]}</span></div>`).join('');
   const pillHTML = [...p.tags, p.archetype].map(t=>`<span class="bio-pill">${t}</span>`).join('');
-  const avaHTML = p.img
-    ? `<img class="bio-img" src="${p.img}" alt="" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'bio-init',textContent:'${p.init||inits(p.name)}',style:'width:88px;height:88px;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;font-size:30px;font-weight:600;color:#fff;background:${p.tone}'}))">`
-    : `<span class="bio-init" style="background:linear-gradient(135deg,${p.tone},${p.tone}cc)">${p.init||inits(p.name)}</span>`;
+  const avaHTML = `<span class="bio-init" aria-hidden="true">${aiMark(60,true)}</span>`;
   return `<div class="prof">
     <div class="prof-eyb">
       <span class="prof-badge">PEOPLE</span>
@@ -810,7 +803,7 @@ function startOrb(canvas, p) {
       ctx.beginPath(); ctx.arc(sx,sy,pt.size*(0.5+dot*1.1),0,Math.PI*2); ctx.fill();
     }
 
-    // Photo / initials circle — drawn after particles so it's always legible
+    // AI identity mark — drawn after particles so it is always legible
     const photoR = R * 0.26;
     if (orbImgEl) {
       ctx.save();
@@ -823,16 +816,18 @@ function startOrb(canvas, p) {
       ctx.drawImage(orbImgEl, cx-photoR, cy-photoR, photoR*2, photoR*2);
       ctx.restore();
     } else {
-      // white disc + initials
+      // white disc + selected Spark duotone mark
       ctx.save();
       ctx.shadowColor='rgba(0,0,0,0.15)'; ctx.shadowBlur=10;
       ctx.beginPath(); ctx.arc(cx, cy, photoR, 0, Math.PI*2);
       ctx.fillStyle='rgba(255,255,255,0.92)'; ctx.fill();
       ctx.shadowBlur=0;
-      ctx.fillStyle = p.tone;
-      ctx.font = `600 ${Math.round(photoR*0.6)}px "TWK Everett", system-ui`;
-      ctx.textAlign='center'; ctx.textBaseline='middle';
-      ctx.fillText(p.init || inits(p.name), cx, cy);
+      const markSize = photoR * 1.18, markScale = markSize / 32;
+      ctx.translate(cx-markSize/2, cy-markSize/2); ctx.scale(markScale,markScale);
+      ctx.fillStyle='#29707A';
+      ctx.fill(new Path2D('M14 6 C14.9 12.9 19.6 17.6 26.5 18.5 C19.6 19.4 14.9 24.1 14 31 C13.1 24.1 8.4 19.4 1.5 18.5 C8.4 17.6 13.1 12.9 14 6 Z'));
+      ctx.fillStyle='#FF462D';
+      ctx.fill(new Path2D('M24.5 1 C24.9 4.1 27 6.2 30.1 6.6 C27 7 24.9 9.1 24.5 12.2 C24.1 9.1 22 7 18.9 6.6 C22 6.2 24.1 4.1 24.5 1 Z'));
       ctx.restore();
     }
     // accent ring around photo

@@ -8,6 +8,7 @@
    ============================================================ */
 import React, { useRef, useEffect } from 'react';
 import type { Persona } from '@/shared/types';
+import { AiIcon } from '@/shared/AiIcon';
 
 /* ---- palette ---- */
 const ORB_PAL: Record<string, { hues: string[]; core: string; halo: string }> = {
@@ -25,11 +26,6 @@ const GA = Math.PI * (3 - Math.sqrt(5));
 function hexRgba(hex: string, a: number | string) {
   const h = hex.replace('#', '');
   return `rgba(${parseInt(h.slice(0,2),16)},${parseInt(h.slice(2,4),16)},${parseInt(h.slice(4,6),16)},${a})`;
-}
-
-function initials(n: string) {
-  const w = n.trim().split(/\s+/);
-  return (w[0][0] + (w[1] ? w[1][0] : '')).toUpperCase();
 }
 
 /* ---- orb component ---- */
@@ -227,8 +223,6 @@ export function PersonaOrb({ p, isLive }: Props) {
   }, [p.id]); // restart only when persona changes
 
   const img  = p.img;
-  const init = (p as any).init || initials(p.name);
-
   return (
     <>
       {/* inject keyframes + CSS custom properties once */}
@@ -288,9 +282,8 @@ export function PersonaOrb({ p, isLive }: Props) {
               ? <img src={img + '?v=3'} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
               : <span style={{
                   width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  background: p.toneSoft, color: p.tone, fontSize: 52, fontWeight: 600,
-                  fontFamily: 'var(--font-display,system-ui)',
-                }}>{init}</span>
+                  background: '#F8FAFC',
+                }}><AiIcon size={82} /></span>
             }
           </div>
         </div>
